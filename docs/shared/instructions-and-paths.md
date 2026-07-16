@@ -49,3 +49,9 @@ git worktree list --porcelain
 ```
 
 Compare declared ownership and invariants, not byte-for-byte copies that intentionally serve different scopes. If resolving the mismatch requires changing team operating policy or a reusable skill, stop the papercut investigation and hand the evidence to the appropriate private repository owner.
+
+## Cross-project thread identity symptom
+
+When a same-named role thread belongs to another project, classify it as an identity/routing mismatch rather than evidence that the requested project consulted that role. Do not rely on inherited thread IDs or a role title alone.
+
+Capture the source task, destination preview, destination working-directory project, and whether any output was used. Stop the accidental request, exclude its findings, and hand the evidence to the private skills owner for the durable routing rule.
