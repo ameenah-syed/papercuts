@@ -1,20 +1,25 @@
-﻿# Papercuts and Skills
+# Codex Environment Papercuts
 
-A dependency-free troubleshooting handbook for recurring Codex environment failures, plus the durable AmeenahsDevTeam skill and correspondence-routing conventions used to keep agent work consistent across projects.
+A public, dependency-free troubleshooting handbook for recurring Codex environment failures. Papercuts are organized by operating system because paths, shells, sandboxes, package managers, credentials, and filesystem behavior differ across Windows, macOS, and Linux.
 
-The goal is classification before correction. Start with read-only evidence, identify the failing layer, permit at most one focused recovery, and escalate with a sanitized evidence packet when the recovery fails or requires additional authority.
+The goal is classification before correction: gather read-only evidence, identify the failing layer, permit at most one focused recovery, and escalate with a sanitized evidence packet when the recovery fails or requires additional authority.
+
+## Choose your environment
+
+| Environment | Status | Start here |
+| --- | --- | --- |
+| Windows | Documented and checked on Windows 11 | [Windows guide](docs/windows/README.md) |
+| macOS | Contribution lane; commands must be verified on macOS before promotion | [macOS guide](docs/macos/README.md) |
+| Linux | Contribution lane; commands must be verified on a named distribution before promotion | [Linux guide](docs/linux/README.md) |
+| Shared | Portable classification, evidence, and escalation guidance | [Shared guide](docs/shared/README.md) |
 
 ## Start here
 
-1. Read [Quick triage](docs/quick-triage.md).
-2. Use the [live delivery-log default](docs/live-delivery-log.md) for any multi-step investigation or implementation.
-3. Run the read-only [environment diagnostic](scripts/diagnose-environment.ps1) from PowerShell.
-4. Open the guide for the classified failure:
-   - [Instructions and paths](docs/instructions-and-paths.md)
-   - [Runtimes and dependencies](docs/runtimes-and-dependencies.md)
-   - [Windows sandbox and filesystem](docs/windows-sandbox-and-filesystem.md)
-   - [Network, authentication, and TLS](docs/network-auth-and-tls.md)
-5. If unresolved, use the [evidence and escalation template](docs/evidence-and-escalation.md).
+1. Read [Quick triage](docs/shared/quick-triage.md).
+2. Use the [live delivery-log default](docs/shared/live-delivery-log.md) for multi-step investigations.
+3. Select the guide for the current operating system.
+4. On Windows, run the read-only [environment diagnostic](scripts/windows/diagnose-environment.ps1).
+5. If unresolved, use the [evidence and escalation template](docs/shared/evidence-and-escalation.md).
 
 ## Safety defaults
 
@@ -25,43 +30,20 @@ The goal is classification before correction. Start with read-only evidence, ide
 - A delivery workaround is not a platform fix. The documentation labels them separately.
 - Authentication, trust-store, connector-permission, dependency, infrastructure, and elevation changes require explicit human approval.
 
-## Supported baseline
+## Repository boundaries
 
-- Windows 11
-- PowerShell 7 or Windows PowerShell 5.1
-- Git and Codex local workspaces
-- Python, Node.js, npm/pnpm, and GitHub CLI diagnostics
+This repository contains environment-dependent papercuts only. Cross-system Codex skills live in the owner-controlled private skills repository. Publishable AmeenahsDevTeam correspondence remains in the [correspondence archive](https://ameenah-syed.github.io/ameenahs-dev-team-correspondance/).
 
-Commands for other operating systems must be added in separately labeled sections and verified on those systems.
-
-## Repository policy
-
-This repository intentionally has no runtime dependencies. The included PowerShell scripts use built-in commands and never print allowlisted environment-variable values. Diagnostic output still contains local-sensitive paths and repository metadata; review and redact it before sharing. See [Contributing](CONTRIBUTING.md) before adding diagnostics.
-
-## AmeenahsDevTeam skill and correspondence archive
-
-The active global team skill is `C:\Users\SYEX8X/.codex/skills/ameenahs-dev-team/SKILL.md`. Project and global `AGENTS.md` files should point agents to that skill rather than copying or inventing a competing operating source.
-
-Publishable AmeenahsDevTeam correspondence is indexed at:
-
-- Website: [AmeenahsDevTeam Correspondence](https://ameenah-syed.github.io/ameenahs-dev-team-correspondance/)
-- Source repository: [ameenahs-dev-team-correspondance](https://github.com/ameenah-syed/ameenahs-dev-team-correspondance)
-
-For every substantive consultation, decision exchange, review, QA pass, conflict, publication action, or execution update:
-
-1. Create the canonical detailed HTML artifact in the originating project's `plans/correspondance/` folder.
-2. Include sender/recipient and thread IDs, status/type, request and constraints, bounded response, scope limits, evidence, conflict state, decision custody, exact verification, next actions, and publication boundary.
-3. Send Raven the artifact path, status, one-sentence summary, verification state, and publication sensitivity in the standing role thread.
-4. Do not publish directly unless Raven explicitly assigns that step. Protected content must be withheld or redacted and labeled.
-5. Treat the website as the durable public index and the source HTML as the canonical record. A message is not an artifact, and an artifact is not published until deployment is verified.
+The handbook intentionally has no runtime dependencies. Diagnostic output can still contain local-sensitive paths and repository metadata; review and redact it before sharing. See [Contributing](CONTRIBUTING.md) before adding diagnostics.
 
 ## Provenance
 
-The handbook was synthesized under AmeenahsDevTeam work thread `T-2026-07-16-001` from actual consultations with Echo, Ledger, Beacon, Cipher, Cricket, and The Boulder. Consultation records are preserved in [`plans/correspondance/`](plans/correspondance/).
+The original Windows handbook was synthesized under AmeenahsDevTeam work thread `T-2026-07-16-001`. Its consultation records remain in [`plans/correspondance/`](plans/correspondance/). The repository split and environment taxonomy were recorded under `T-2026-07-16-007`.
 
 ## Current limitations
 
+- Windows is the only verified environment at the time of the split.
+- macOS and Linux lanes intentionally contain verification requirements rather than copied Windows commands.
 - Network and authentication recovery cannot be verified without a working, authorized external connection.
-- The Windows split-writable-root message is documented as a pre-execution sandbox-wrapper failure; the repository provides delivery recovery, not a platform patch.
-- No software license has yet been selected. The repository is currently provided as a reference resource.
-
+- The Windows split-writable-root message is documented as a pre-execution sandbox-wrapper failure; this repository provides delivery recovery, not a platform patch.
+- No software license has yet been selected. The repository is provided as a reference resource.

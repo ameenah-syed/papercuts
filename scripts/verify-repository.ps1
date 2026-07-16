@@ -1,4 +1,4 @@
-﻿[CmdletBinding()]
+[CmdletBinding()]
 param()
 
 $ErrorActionPreference = 'Stop'
@@ -7,14 +7,19 @@ $required = @(
     'README.md',
     'AGENTS.md',
     'CONTRIBUTING.md',
-    'docs/quick-triage.md',
-    'docs/instructions-and-paths.md',
-    'docs/runtimes-and-dependencies.md',
-    'docs/windows-sandbox-and-filesystem.md',
-    'docs/network-auth-and-tls.md',
-    'docs/evidence-and-escalation.md',
-    'docs/l1-dependency-sweeper.md',
-    'scripts/diagnose-environment.ps1'
+    'docs/shared/README.md',
+    'docs/shared/quick-triage.md',
+    'docs/shared/instructions-and-paths.md',
+    'docs/shared/runtimes-and-dependencies.md',
+    'docs/shared/network-auth-and-tls.md',
+    'docs/shared/evidence-and-escalation.md',
+    'docs/shared/l1-dependency-sweeper.md',
+    'docs/shared/live-delivery-log.md',
+    'docs/windows/README.md',
+    'docs/windows/sandbox-and-filesystem.md',
+    'docs/macos/README.md',
+    'docs/linux/README.md',
+    'scripts/windows/diagnose-environment.ps1'
 )
 
 $missing = $required | Where-Object { -not (Test-Path -LiteralPath (Join-Path $root $_)) }
@@ -24,9 +29,9 @@ if ($missing) {
 }
 
 $trackedText = Get-ChildItem -LiteralPath $root -Recurse -File |
-    Where-Object { $_.Extension -in '.md','.ps1','.html' }
+    Where-Object { $_.FullName -notmatch '[\\/]\.git[\\/]' -and $_.Extension -in '.md','.ps1','.html' }
 
-$profilePattern = '[A-Za-z]:\\Users\\[^\\\s]+\\'
+$profilePattern = '[A-Za-z]:[\\/]+Users[\\/]+[^\\/\s]+[\\/]'
 $fixture = 'C:' + '\Users\' + 'Example\private.txt'
 if ($fixture -notmatch $profilePattern) {
     Write-Error 'Profile-path detector failed its synthetic fixture.'
@@ -39,4 +44,10 @@ if ($unsafe) {
     exit 1
 }
 
-Write-Output "Repository verification passed: $($required.Count) required files present; generic profile-path detector passed its fixture and found no machine-local profile paths."
+$skillPayloads = Get-ChildItem -LiteralPath $root -Recurse -Filter 'SKILL.md' -File
+if ($skillPayloads) {
+    $skillPayloads | ForEach-Object { Write-Error "Skill payload belongs in the private skills repository: $($_.FullName)" }
+    exit 1
+}
+
+Write-Output "Repository verification passed: $($required.Count) required files present; OS lanes present; no skill payloads or machine-local profile paths found."
