@@ -7,13 +7,14 @@ The goal is classification before correction. Start with read-only evidence, ide
 ## Start here
 
 1. Read [Quick triage](docs/quick-triage.md).
-2. Run the read-only [environment diagnostic](scripts/diagnose-environment.ps1) from PowerShell.
-3. Open the guide for the classified failure:
+2. Use the [live delivery-log default](docs/live-delivery-log.md) for any multi-step investigation or implementation.
+3. Run the read-only [environment diagnostic](scripts/diagnose-environment.ps1) from PowerShell.
+4. Open the guide for the classified failure:
    - [Instructions and paths](docs/instructions-and-paths.md)
    - [Runtimes and dependencies](docs/runtimes-and-dependencies.md)
    - [Windows sandbox and filesystem](docs/windows-sandbox-and-filesystem.md)
    - [Network, authentication, and TLS](docs/network-auth-and-tls.md)
-4. If unresolved, use the [evidence and escalation template](docs/evidence-and-escalation.md).
+5. If unresolved, use the [evidence and escalation template](docs/evidence-and-escalation.md).
 
 ## Safety defaults
 

@@ -1,5 +1,9 @@
 # Quick triage
 
+
+## 0. Make state visible
+
+For any multi-step investigation or implementation, begin and maintain a compact delivery log using [the default format](live-delivery-log.md). Show the current state, responsible owner, verified evidence, decision or blocker, and next action. A command or delegated task is `active` only while it is actually running; use `waiting`, `blocked`, or `complete` otherwise.
 ## 1. Classify one primary symptom
 
 | Class | Typical evidence | First action |
