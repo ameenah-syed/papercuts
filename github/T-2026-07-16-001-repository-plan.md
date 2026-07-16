@@ -7,4 +7,4 @@
 - Advisory threads: Echo, Ledger, Beacon, Cipher, Cricket, The Boulder
 - Publishing gate: working GitHub CLI authentication and network path
 - Merge policy: no auto-merge
-- Current state: local synthesis and verification before publication
+- Current state: published and verified at `https://github.com/ameenah-syed/codex-environment-papercuts`
