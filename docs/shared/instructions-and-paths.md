@@ -1,21 +1,28 @@
-﻿# Instructions and paths
+# Instructions and paths
+
+This page diagnoses environment failures involving instruction discovery, path ownership, quoting, and worktree placement. It does not define reusable skills or agent-routing policy.
 
 ## Codex instruction layers
 
-Codex normally combines global guidance with project and nested guidance. Treat each layer as having a different owner:
+Codex can combine global, project, and nested instruction files. When behavior appears inconsistent, first identify which files were actually in scope:
 
-- Global `AGENTS.md`: small, stable user defaults.
-- Project `AGENTS.md`: repository conventions and project-specific overrides.
-- Nested instructions: subtree-specific rules.
-- Skills: reusable workflows and detailed operating knowledge.
+- Global `AGENTS.md`: user-level defaults.
+- Project `AGENTS.md`: repository conventions and project overrides.
+- Nested instructions: subtree-specific guidance.
+- Registered skills: reusable workflows installed outside this papercuts repository.
 
-Avoid duplicating mutable policy across all layers. Prefer a concise pointer to one authoritative workflow and keep project exceptions local.
+A duplicated or stale rule can look like a runtime defect. Record the discovered files, their ownership layer, and the expected precedence before editing any of them.
 
-## Global versus project skills
+## Skill-path symptoms
 
-A project-relative path such as `.codex/skills/example/SKILL.md` and a user-global path such as `$CODEX_HOME/skills/example/SKILL.md` are different installations. Do not move instructions between scopes without rewriting and verifying their references.
+A project-relative path such as `.codex/skills/example/SKILL.md` and a user-global path beneath `$CODEX_HOME/skills` refer to different installations. For diagnosis:
 
-Tracked files should not contain expanded user-profile paths. Use `%USERPROFILE%` only in clearly Windows-specific runtime examples when necessary. Use repository-relative paths or documented discovery steps.
+- record which scope the caller expected;
+- verify the path exists without printing the skill's private content;
+- avoid expanding a user-profile path into tracked public documentation;
+- stop before copying, rewriting, installing, or publishing a skill.
+
+Reusable skill authoring, installation, synchronization, and project-scoped thread routing belong in the owner-controlled private skills repository. This page keeps only the environment symptom and handoff boundary.
 
 ## Windows path conventions
 
@@ -27,9 +34,9 @@ Get-Content -Raw -LiteralPath (Join-Path $repo 'AGENTS.md')
 
 - Use `-LiteralPath` for filesystem operations.
 - Quote variables containing paths.
-- Pass arguments as arrays/direct parameters; avoid `Invoke-Expression`.
+- Pass arguments directly or as arrays; avoid `Invoke-Expression`.
 - Use `--` before ambiguous Git pathspecs.
-- Resolve and inspect source and destination before any move.
+- Resolve and inspect source and destination before a move.
 - Use forward-slash repository-relative links in Markdown.
 
 ## Drift checks
@@ -41,5 +48,4 @@ rg -n --hidden -g '!.git/**' '[A-Za-z]:\\Users\\' .
 git worktree list --porcelain
 ```
 
-Compare invariants and declared ownership, not byte-for-byte copies that intentionally serve different scopes.
-
+Compare declared ownership and invariants, not byte-for-byte copies that intentionally serve different scopes. If resolving the mismatch requires changing team operating policy or a reusable skill, stop the papercut investigation and hand the evidence to the appropriate private repository owner.
