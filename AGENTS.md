@@ -8,6 +8,11 @@ Use this repository as a read-only troubleshooting reference by default.
 - Capture sanitized evidence before proposing a fix.
 - Identify the primary failing layer; record secondary noise separately.
 - Permit one focused recovery with an explicit success signal.
+- Never retry an identical failed action without an evidence-backed hypothesis and a materially changed variable.
+- Prompt rewording alone is not a recovery.
+- Apply the 30/60-second stall rule to attributable commands and processes, not model context loading or reasoning.
+- For small, reversible tasks, prefer direct single-owner execution when coordination overhead would exceed implementation cost.
+- Produce documentation after obtaining evidence unless documentation is itself the requested deliverable.
 - Do not print secrets or full environment/configuration dumps.
 - Do not install dependencies, modify authentication, disable TLS checks, clear shared caches, elevate, or perform destructive/cross-root operations without explicit human approval.
 - Clearly label verified facts, inferences, expected behavior, and unverified claims.
