@@ -4,6 +4,7 @@
 ## 0. Make state visible
 
 For any multi-step investigation or implementation, begin and maintain a compact delivery log using [the default format](live-delivery-log.md). Show the current state, responsible owner, verified evidence, decision or blocker, and next action. A command or delegated task is `active` only while it is actually running; use `waiting`, `blocked`, or `complete` otherwise.
+
 ## 1. Classify one primary symptom
 
 | Class | Typical evidence | First action |
@@ -19,7 +20,8 @@ For any multi-step investigation or implementation, begin and maintain a compact
 | Authentication | 401/403, invalid keyring credential | Stop; use supported interactive refresh after approval |
 | Native build | Missing compiler, SDK, DLL, or ABI | Prefer prebuilt artifacts; stop before installing toolchains |
 | Code regression | Install succeeds but named check fails | Route to engineering/CI, not environment triage |
-| Stall/resource | No output or progress evidence | Apply two 30-second checkpoints |
+| Coordination/retry churn | Repeated polling, re-prompting, or restarts without a changed hypothesis | Name the blocker and changed variable; switch strategy |
+| Stall/resource | An attributable command has no output or process/diff/timestamp progress | Apply two checkpoints to that command; do not treat reasoning as a subprocess |
 | Unknown | Evidence fits no class | Stop and escalate |
 
 ## 2. Capture evidence
@@ -31,6 +33,10 @@ Do not collect complete environment dumps, credential stores, verbose HTTP trace
 ## 3. Permit one focused recovery
 
 Change one suspected cause and rerun the smallest failing command once. Define the success signal first. Do not combine runtime changes, cache deletion, upgrades, installs, and broad test runs.
+
+Do not retry an identical action without naming the changed variable and why it should change the result. Prompt rewording alone does not qualify as recovery.
+
+For the full diagnosis and amended process, see [Retry and stall churn](retry-and-stall-churn.md).
 
 ## 4. Stop and escalate
 
