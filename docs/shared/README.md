@@ -3,6 +3,7 @@
 Portable classification, evidence, and escalation guidance that does not depend on a particular shell or filesystem.
 
 - [Quick triage](quick-triage.md)
+- [Retry and stall churn](retry-and-stall-churn.md)
 - [Instructions and paths](instructions-and-paths.md)
 - [Runtimes and dependencies](runtimes-and-dependencies.md)
 - [Network, authentication, and TLS](network-auth-and-tls.md)
