@@ -19,7 +19,8 @@ $required = @(
     'docs/windows/sandbox-and-filesystem.md',
     'docs/macos/README.md',
     'docs/linux/README.md',
-    'scripts/windows/diagnose-environment.ps1'
+    'scripts/windows/diagnose-environment.ps1',
+    'scripts/windows/test-diagnose-environment.ps1'
 )
 
 $missing = $required | Where-Object { -not (Test-Path -LiteralPath (Join-Path $root $_)) }
@@ -48,6 +49,28 @@ $skillPayloads = Get-ChildItem -LiteralPath $root -Recurse -Filter 'SKILL.md' -F
 if ($skillPayloads) {
     $skillPayloads | ForEach-Object { Write-Error "Skill payload belongs in the private skills repository: $($_.FullName)" }
     exit 1
+}
+
+$implementationSurfaces = @(
+    'scripts/windows/diagnose-environment.ps1',
+    'scripts/windows/test-diagnose-environment.ps1'
+)
+$forbiddenPatterns = @(
+    'Start-Process.+RunAs',
+    'Invoke-Expression',
+    'danger-full-access',
+    'dangerously-bypass-approvals-and-sandbox',
+    'Set-ItemProperty.+EnableLUA',
+    'schtasks'
+)
+foreach ($surface in $implementationSurfaces) {
+    $source = Get-Content -Raw -LiteralPath (Join-Path $root $surface)
+    foreach ($pattern in $forbiddenPatterns) {
+        if ($source -match $pattern) {
+            Write-Error "Forbidden implementation surface: $surface $pattern"
+            exit 1
+        }
+    }
 }
 
 Write-Output "Repository verification passed: $($required.Count) required files present; OS lanes present; no skill payloads or machine-local profile paths found."

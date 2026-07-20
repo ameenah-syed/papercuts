@@ -50,6 +50,30 @@ if ($git) {
     }
 }
 
+$tokenIsElevated = $false
+try {
+    $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = New-Object Security.Principal.WindowsPrincipal($identity)
+    $tokenIsElevated = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+} catch {}
+
+$configuredSandbox = $null
+$configPath = Join-Path ([Environment]::GetFolderPath('UserProfile')) '.codex\config.toml'
+if (Test-Path -LiteralPath $configPath -PathType Leaf) {
+    $inWindows = $false
+    foreach ($line in (Get-Content -LiteralPath $configPath)) {
+        if ($line -match '^\s*\[([^]]+)\]\s*$') {
+            $inWindows = ($Matches[1] -eq 'windows')
+            continue
+        }
+        if ($inWindows -and $line -match '^\s*sandbox\s*=\s*"(elevated|unelevated)"\s*$') {
+            $configuredSandbox = $Matches[1]
+            break
+        }
+    }
+}
+$sandboxLogPresent = Test-Path -LiteralPath (Join-Path ([Environment]::GetFolderPath('UserProfile')) '.codex\.sandbox\sandbox.log') -PathType Leaf
+
 [pscustomobject]@{
     Timestamp = (Get-Date).ToString('o')
     PowerShell = $PSVersionTable.PSVersion.ToString()
@@ -57,5 +81,12 @@ if ($git) {
     Tools = $tools
     EnvironmentVariablePresence = $environmentPresence
     Git = $gitState
+    WindowsSandbox = [pscustomobject]@{
+        ConfiguredMode = $configuredSandbox
+        TokenIsElevated = $tokenIsElevated
+        SandboxLogPresent = $sandboxLogPresent
+        OneRootLaunchRecommended = $true
+        ProtectedCredentialStoresInspected = $false
+    }
     Warning = 'Output contains local paths and repository metadata. Review and redact before sharing.'
 } | ConvertTo-Json -Depth 6

@@ -14,6 +14,7 @@ For any multi-step investigation or implementation, begin and maintain a compact
 | Runtime mismatch | Wrong Python/Node or package owner | Pair executable with its package manager |
 | Lock/resolution drift | Missing package, frozen-lock failure | Compare manifest and lockfile; do not update yet |
 | Sandbox wrapper | Split writable roots, pre-execution refusal | Record every advertised root; try one exact-root task |
+| Elevation boundary | Setup helper canceled, ShellExecuteExW 1223 | Record cancellation; request one new-task UAC proof, do not auto-confirm |
 | Filesystem/temp/cache | Access denied or fatal temp/cache error | Identify the exact target and owning root |
 | Network/proxy | DNS, TCP, timeout, refused proxy | Test transport without credentials |
 | TLS trust | Issuer-chain or certificate validation error | Verify expected CA provenance; never bypass validation |
@@ -37,6 +38,11 @@ Change one suspected cause and rerun the smallest failing command once. Define t
 Do not retry an identical action without naming the changed variable and why it should change the result. Prompt rewording alone does not qualify as recovery.
 
 For the full diagnosis and amended process, see [Retry and stall churn](retry-and-stall-churn.md).
+
+For Codex on Windows, prefer a single canonical Git root and the supported
+elevated sandbox. If direct patching remains blocked, a reviewed patch may be
+used only with an independently delivered digest typed by the human immediately
+before mutation. That path is an operational workaround, not a platform fix.
 
 ## 4. Stop and escalate
 

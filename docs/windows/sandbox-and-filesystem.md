@@ -18,6 +18,25 @@ For the recorded environment, use one dedicated task whose cwd and sole declared
 
 This is a delivery workaround, not the platform fix. A platform fix must safely canonicalize and atomically enforce the complete writable-root collection without widening access.
 
+### Supported elevated sandbox
+
+When approved, configure the supported Windows elevated sandbox while retaining
+workspace-write and on-request approvals, then start a new task. The expected
+boundary is one interactive UAC confirmation. ShellExecuteExW error 1223 means
+that confirmation was canceled before the child command ran. Do not edit UAC
+registry policy, save administrator credentials, auto-click UAC, create a
+highest-privilege scheduled task, or switch to full access.
+
+If the elevated proof is unavailable, use the one-root launcher first. A
+reviewed patch runner is a last-mile delivery mechanism only: a separate
+reviewer approves the exact SHA-256, the operator enters it interactively, and
+the runner revalidates repository identity, path safety, and git apply --check.
+It remains **OPERATIONAL WORKAROUND - DOES NOT FIX CODEX SPLIT-ROOT SANDBOX**.
+
+The read-only diagnostic reports only the configured sandbox mode, whether the
+current token is elevated, and whether a sandbox log exists. It does not read
+the log or inspect protected credential stores.
+
 ## Worktrees
 
 - Place issue worktrees under `<repo>/.worktrees/<thread-or-issue>`.
