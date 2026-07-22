@@ -79,3 +79,31 @@ if it fails, stop and preserve the exact error. Do not broaden ACLs on `C:\tmp`,
 disable the sandbox, use full access, or assume a Git patch application repairs
 the helper. A successful one-root task is a delivery proof, not the platform
 fix for multi-root policy compilation.
+
+### Clean-clone integration surface when generic writers are blocked
+
+**Evidence classification:** verified in a Windows ICVision delivery run on
+2026-07-22. This is an operational workaround, not a Codex sandbox repair.
+
+In the same project, a newly created standalone Git clone under the repository
+root could create and remove a harmless probe file, while generic PowerShell
+writers such as `Copy-Item` and `Set-Content` were blocked before they ran in
+the original linked worktree. Git-native application of a reviewed patch that
+was derived from an existing source file succeeded in the clone.
+
+Use this only after preserving the original worktree unchanged:
+
+1. Create a clean standalone clone on the intended branch beneath the project
+   root; it must have its own `.git` directory and one sole editor.
+2. Prove that surface with a reversible create/delete probe.
+3. Transfer only an exact reviewed diff or explicitly identified files. Run
+   `git apply --check` before `git apply`, then inspect `git diff` and run the
+   focused test.
+4. Keep the original drafts intact until the new checkout has independent
+   review and verification. Do not edit both checkouts concurrently.
+
+This isolates a temporary delivery path. It does **not** establish that linked
+worktrees are the cause, repair the Windows helper's task-wide writable-root
+policy, justify ACL changes to `C:\tmp`, or authorize unrestricted shell/file
+access. If the clone fails its reversible probe, stop and record the exact
+failure instead of creating more checkouts.
