@@ -54,3 +54,28 @@ Never recursively delete or move an unresolved/computed path. Verify its canonic
 
 An elevated security context may be unable to execute a temporary launcher created for the unelevated context. Record the exact path, signer status, identity class, error code, and whether denial occurred before execution. Do not weaken ACLs or security controls as a shortcut.
 
+
+### Setup-refresh ACE failure on `C:\tmp`
+
+**Evidence classification:** verified in a Windows ICVision code-edit task in July 2026. The broader affected build range remains unverified.
+
+Another pre-file-access signature is:
+
+```text
+windows sandbox failed: helper_unknown_error: setup refresh had errors
+write ACE failed on C:\tmp: SetNamedSecurityInfoW failed: 5
+```
+
+This means the filesystem helper attempted to prepare a declared global writable
+root and failed before `apply_patch` could inspect the requested source file.
+It does not prove that the project worktree, Git index, patch contents, or
+target file permissions are bad. Ordinary shell/tests can still work because
+they may not use the helper's ACL setup path.
+
+Use one fresh dedicated code-edit task with the exact canonical worktree as its
+sole writable root. If temporary files are required, use a declared scratch
+directory inside that worktree. First run one reversible `apply_patch` probe;
+if it fails, stop and preserve the exact error. Do not broaden ACLs on `C:\tmp`,
+disable the sandbox, use full access, or assume a Git patch application repairs
+the helper. A successful one-root task is a delivery proof, not the platform
+fix for multi-root policy compilation.
